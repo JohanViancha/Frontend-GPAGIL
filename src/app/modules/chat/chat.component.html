@@ -1,0 +1,40 @@
+
+<div class="col-6 chat-float">
+    <div class="collapse multi-collapse h-100" id="multiCollapseExample2">
+
+        <div class="card h-100">
+            <div class="card-header">
+                Chat
+              </div>
+            <div class="card-body scroll">
+
+             
+                <li class="list-group-item" *ngFor="let message of messages">
+                  <fa-icon class="fa-chat" [icon]="faUser"></fa-icon> <span class="badge bg-primary">{{message.name_user}} {{message.lastname_user}}</span>
+                  <p class="list-group-item" >{{message.message}}</p>
+                  <fa-icon class="fa-chat" [icon]="faClock"></fa-icon> <span class="text-date">{{message.datetime_send | date:'dd/mm/yyyy hh:mm:ss'}}</span>
+                </li>
+
+        
+            </div>
+            <div class="card-footer">
+              <div class="input-group">
+                <input type="text" class="form-control" name="message" [(ngModel)]="message" placeholder="Escribe un mensaje" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" (click)="sendMessage()"type="button" id="button-addon2">Enviar</button>
+              </div>
+            </div>
+        </div>
+      
+    </div>
+  </div>
+<button (click)="openModalChat()" class="btn btn-primary button-float rounded-circle" type="button" 
+  data-bs-toggle="collapse" data-bs-target=".multi-collapse" 
+  aria-expanded="false" 
+  aria-controls="multiCollapseExample1 multiCollapseExample2">
+  <fa-icon class="faMessage" [icon]="faMessage"></fa-icon>
+</button>
+
+ 
+    
+
+

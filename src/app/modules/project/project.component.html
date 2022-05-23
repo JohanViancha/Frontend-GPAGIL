@@ -1,0 +1,119 @@
+
+
+<div class="container my-4">
+    <h2 class="text-center">{{projectSelected.name_project}}</h2>
+    <p class="text-center fs-5">{{projectSelected.description_project}}</p>
+    <button class="btn btn-light border-dark my-2" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Crear tarea</button>
+
+  
+    <div class="row align-items-start">
+      <div class="col-12 col-sm-12 col-md-4">
+        <div class="card border-secondary mb-3">
+          <div class="card-header badge bg-secondary fs-5 text-center">Por hacer</div>
+          <div *ngIf="todo.length==0" class="card-body text-center">
+            No hay tareas por hacer
+          </div>
+          <div class="card-body" *ngIf="todo.length>0">
+            <div *ngFor="let taskTodo of todo" class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{taskTodo.name_task}}</h5>
+                <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskTodo.name_user }} {{taskTodo.lastname_user }}</h6>
+                <p class="card-text">{{taskTodo.description_task}}</p>
+                <p class="card-text">{{taskTodo.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
+                <button class="btn btn-secondary me-2">Ver detalle</button>
+                <button class="btn btn-primary" (click)="updateStateTask(taskTodo.id_task,'2')">Hacer tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-4">
+        <div class="card border-primary mb-3">
+          <div class="card-header badge bg-primary fs-5 text-center">Haciendo</div>
+          <div *ngIf="doing.length==0" class="card-body text-center">
+            No hay tareas por hacer
+          </div>
+          <div class="card-body" *ngIf="doing.length>0">
+            <div *ngFor="let taskDoing of doing" class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{taskDoing.name_task}}</h5>
+                <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDoing.name_user }} {{taskDoing.lastname_user }}</h6>
+                <p class="card-text">{{taskDoing.description_task}}</p>
+                <p class="card-text">{{taskDoing.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
+                <button class="btn btn-secondary me-2">Ver detalle</button>
+                <button class="btn btn-success" (click)="updateStateTask(taskDoing.id_task,'3')">Terminar tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-4">
+        <div class="card border-success mb-3">
+          <div class="card-header badge bg-success fs-5 text-center">Hecho</div>
+          <div *ngIf="done.length==0" class="card-body text-center">
+            No hay tareas hechas
+          </div>
+          <div class="card-body" *ngIf="done.length>0">
+            <div *ngFor="let taskDone of done" class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{taskDone.name_task}}</h5>
+                <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDone.name_user }} {{taskDone.lastname_user }}</h6>
+                <p class="card-text">{{taskDone.description_task}}</p>
+                <p class="card-text">{{taskDone.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
+                <button class="btn btn-secondary">Ver detalle</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Creación de tarea</h5>
+        <button type="button" class="btn-close" (click)="clearFormModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nam_task" class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nameTask" [(ngModel)]="nameTask" required>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Descripción </label>
+            <textarea class="form-control" required name="descriptionTask" [(ngModel)]="descriptionTask"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Asinación</label>
+            <select class="form-select" name="assignment" [(ngModel)]="assignment" required>
+              <option selected value="0">Seleccionar responsable</option>
+              <option *ngFor="let user of usersAssignment" [value]="user.id_user">{{user.name_user }} {{user.lastname_user}}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Fecha de entrega</label>
+            <input type="datetime-local" name="dateEnd" [(ngModel)]="dateEnd" class="form-control" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="createTask()">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+
+</div>
+  
+
+<app-chat></app-chat>

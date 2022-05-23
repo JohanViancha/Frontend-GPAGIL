@@ -1,0 +1,67 @@
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">GPAGIL</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Proyectos
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li class="dropdown-item" *ngFor="let item of proyects" (click)="searchTaks(item.id_project, item.name_project, item.description_project, item.id_user_project)">{{item.name_project}}</li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <button class="nav-link btn btn-light" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#modalProject">
+              Crear projecto <fa-icon class="fa-chat" [icon]="faPlusCircle"></fa-icon>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="modal fade" id="modalProject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Creación del proyecto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="nam_task" class="form-label">Nombre</label>
+              <input type="text" class="form-control" name="nameTask" [(ngModel)]="nameProject" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Descripción </label>
+              <textarea class="form-control" required name="descriptionTask" [(ngModel)]="descriptionProject"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Asinación</label> <fa-icon data-bs-toggle="tooltip" title="Para seleccionar más de un usuario mantenga la tecla CTRL" [icon]="faExclamationCircle"></fa-icon>
+              <select class="form-select" multiple aria-label="multiple select example" name="assignmentUserProject" [(ngModel)]="assignmentUserProject">
+                <option *ngFor="let user of allUsers" [value]="user.id_user">{{user.name_user}} {{ user.lastname_user}}</option>
+              </select>
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Fecha estimada de entrega</label>
+              <input type="datetime-local" name="dateEnd" [(ngModel)]="dateEndProject" class="form-control" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button"  (click)="createProject()" class="btn btn-primary">Crear</button>
+        </div>
+      </div>
+    </div>
+  </div>
