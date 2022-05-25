@@ -1,6 +1,6 @@
 
 
-<div class="container my-4">
+<div class="container-fluid mt-4">
     <h2 class="text-center">{{projectSelected.name_project}}</h2>
     <p class="text-center fs-5">{{projectSelected.description_project}}</p>
     <button class="btn btn-light border-dark my-2" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Crear tarea</button>
@@ -14,14 +14,25 @@
             No hay tareas por hacer
           </div>
           <div class="card-body" *ngIf="todo.length>0">
-            <div *ngFor="let taskTodo of todo" class="card">
-              <div class="card-body">
+            <div *ngFor="let taskTodo of todo" class="card mb-2">
+              <div class="card-header">
                 <h5 class="card-title">{{taskTodo.name_task}}</h5>
+              </div>           
+              <div class="card-body">
                 <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskTodo.name_user }} {{taskTodo.lastname_user }}</h6>
+                <h6 *ngIf="taskTodo.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
+                <h6 *ngIf="taskTodo.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
+                <h6 *ngIf="taskTodo.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>
                 <p class="card-text">{{taskTodo.description_task}}</p>
                 <p class="card-text">{{taskTodo.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
                 <button class="btn btn-secondary me-2">Ver detalle</button>
                 <button class="btn btn-primary" (click)="updateStateTask(taskTodo.id_task,'2')">Hacer tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+              </div>
+              <div class="card-footer">
+                <label for="progress">Progreso</label>
+                <div class="progress" style="height: 20px;">
+                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                </div>
               </div>
             </div>
           </div>
@@ -35,13 +46,25 @@
           </div>
           <div class="card-body" *ngIf="doing.length>0">
             <div *ngFor="let taskDoing of doing" class="card">
-              <div class="card-body">
+              <div class="card-header">
                 <h5 class="card-title">{{taskDoing.name_task}}</h5>
+              </div>
+              <div class="card-body">
+                
                 <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDoing.name_user }} {{taskDoing.lastname_user }}</h6>
-                <p class="card-text">{{taskDoing.description_task}}</p>
+                <h6 *ngIf="taskDoing.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
+                <h6 *ngIf="taskDoing.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
+                <h6 *ngIf="taskDoing.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>                <p class="card-text">{{taskDoing.description_task}}</p>
                 <p class="card-text">{{taskDoing.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
                 <button class="btn btn-secondary me-2">Ver detalle</button>
                 <button class="btn btn-success" (click)="updateStateTask(taskDoing.id_task,'3')">Terminar tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+              </div>
+              <div class="card-footer">
+                <label for="progress">Progreso</label>
+                <div class="progress" style="height: 20px;">
+             
+                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                </div>
               </div>
             </div>
           </div>
@@ -55,12 +78,23 @@
           </div>
           <div class="card-body" *ngIf="done.length>0">
             <div *ngFor="let taskDone of done" class="card">
+              <div class="card-header">
+                <h5 class="card-title">{{taskDone.name_task}}</h5>
+              </div>
               <div class="card-body">
                 <h5 class="card-title">{{taskDone.name_task}}</h5>
                 <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDone.name_user }} {{taskDone.lastname_user }}</h6>
-                <p class="card-text">{{taskDone.description_task}}</p>
+                <h6 *ngIf="taskDone.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
+                <h6 *ngIf="taskDone.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
+                <h6 *ngIf="taskDone.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>                <p class="card-text">{{taskDone.description_task}}</p>
                 <p class="card-text">{{taskDone.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
                 <button class="btn btn-secondary">Ver detalle</button>
+              </div>
+              <div class="card-footer">
+                <label for="progress">Progreso</label>
+                <div class="progress" style="height: 20px;">            
+                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                </div>
               </div>
             </div>
           </div>
@@ -96,6 +130,46 @@
               <option selected value="0">Seleccionar responsable</option>
               <option *ngFor="let user of usersAssignment" [value]="user.id_user">{{user.name_user }} {{user.lastname_user}}</option>
             </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="form3Example4" >Prioridad</label>
+            <div class="form-outline">
+              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="priorityTask" [(ngModel)]="priorityTask" [value]="1" id="btnradio1"  autocomplete="off">
+                <label class="btn btn-outline-success" for="btnradio1">Baja</label>
+              
+                <input type="radio" class="btn-check" name="priorityTask" [(ngModel)]="priorityTask" [value]="2" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-warning" for="btnradio2">Media</label>
+
+                <input type="radio" class="btn-check" name="priorityTask" [(ngModel)]="priorityTask" [value]="3" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-danger" for="btnradio3">Alta</label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Subtareas</label>
+            <div class="row border p-3 m-0">
+              <label for="nam_task" class="form-label">Nombre</label>
+              <div class="col-10 p-0">
+                
+                <input type="text" class="form-control" name="subTarea" [(ngModel)]="subTask" required>
+              </div>
+
+              <div class="col-2">
+                <button class="btn"><fa-icon class="text-primary" (click)="addSubTask()" [icon]="faPlusCircle"></fa-icon></button>
+              </div>
+
+              <ul *ngIf="subTasks.length > 0" class="list-group mt-2">
+                
+                <li class="list-group-item" *ngFor="let subTask of subTasks"> <button class="btn"><fa-icon class="text-danger" (click)="deleteSubTask(subTask.value)" [icon]="faTrash"></fa-icon></button>{{subTask.name}}  
+                </li> 
+              </ul>
+              
+            </div>
+
           </div>
 
           <div class="mb-3">

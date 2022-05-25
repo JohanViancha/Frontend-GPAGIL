@@ -15,5 +15,5 @@ export interface ProjectSingle {
     id_project:          number;
     name_project:        string;
     description_project: string;
-    id_user_project    : number;
+    id_user_project     : number;
 }

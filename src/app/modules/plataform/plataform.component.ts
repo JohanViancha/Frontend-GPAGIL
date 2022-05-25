@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from '../chat/socket.service';
 import { ChatService } from '../chat/chat.service';
+import { LoginService } from '../login/login.service';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-plataform',
@@ -9,9 +11,11 @@ import { ChatService } from '../chat/chat.service';
 })
 export class PlataformComponent implements OnInit {
 
-  constructor(private chatService: ChatService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
+
+  
 
 }

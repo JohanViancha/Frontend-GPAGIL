@@ -11,7 +11,6 @@ export class AlertsService {
 
 
   loading(){
-
       let timerInterval:any;
       Swal.fire({
         title: 'Cargando...',
@@ -26,24 +25,13 @@ export class AlertsService {
       })
   }
 
-  showAlert(state: string, msg: string) {
-    switch (state) {
-      case 'Correcto':
-        Swal.fire({
-          title: state,
-          text: msg,
-          icon: 'success'
-        })
-        break;
-      case 'Error':
-        Swal.fire({
-          title: state,
-          text: msg,
-          icon: 'error'
-        })
-        break;
-    }
+  showAlert(state: any,title:string,  msg: string) {
 
-
+     Swal.fire({
+          title: title,
+          text: msg,
+          icon: state
+      })
+    
   }
 }

@@ -8,6 +8,9 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { LoginService } from '../../login/login.service';
+import { AlertsService } from '../../../core/alerts.service';
+import { ChatService } from '../../chat/chat.service';
+import { chatMessage } from 'src/app/interfaces/chat.interface';
 
 @Component({
   selector: 'app-menu',
@@ -28,18 +31,24 @@ export class MenuComponent implements OnInit {
 
   constructor(private router: Router,
               private serviceProject: ProjectService,
-              private serviceLogin: LoginService) {
+              private serviceLogin: LoginService,
+              private alertService: AlertsService,
+              private serviceChat: ChatService) {
 
     this.userSe = this.dataLocalStorage();
   }
 
-  ngOnInit(): void {
-    const {id_user} = JSON.parse(localStorage.getItem('userSe') || '{}');   
-    this.serviceProject.getProjectByUsuario(id_user).subscribe(response=>{
-    this.proyects = response;
-    })
+  ngOnInit(): void {  
+    this.getProjectByUser(this.userSe.id_user!);
   }
 
+  async getProjectByUser(id_user:number){
+    console.log(id_user);
+    await this.serviceProject.getProjectByUsuario(id_user).subscribe(response=>{
+      console.log(response);
+      this.proyects = response;
+      })
+  }
   openModal(){
     this.serviceLogin.mostrar().subscribe((users:UserInfor[])=>{
       this.allUsers = users;
@@ -55,16 +64,43 @@ export class MenuComponent implements OnInit {
     }
     this.serviceProject.setProject(projectSingle);
     this.router.navigate(['plataform/project', id]);
+    this.showMessages(id)
   }
 
+  async saveProject(){
+    const userSelect = this.allUsers.filter((user)=>{
+      if(this.assignmentUserProject.includes(user.id_user!)){
+        return user;
+      }
+      return;
+    })
 
-  createProject(){
-    this.serviceProject.createProject(this.nameProject,this.descriptionProject,
-      this.assignmentUserProject,this.dateEndProject, 10).subscribe((res)=>{
-        console.log(res);
+    const user = JSON.parse(localStorage.getItem('userSe')!);
+    await this.serviceProject.createProject(this.nameProject,this.descriptionProject,
+      userSelect,this.dateEndProject, user.id_user).subscribe((res)=>{
+        this.alertService.showAlert('success','Creación del proyecto', res.message)
       })
+    
   }
 
+  async createProject(){
+    await this.saveProject();
+    await this.getProjectByUser(this.userSe.id_user!);
+    this.clearFormModal();
+  }
+
+  clearFormModal(){
+    this.nameProject = '';
+    this.descriptionProject = '';
+    this.openModal();
+    this.dateEndProject = new Date();
+  }
+
+  showMessages(idProject:number){
+    this.serviceChat.getMessageByProjectUser(idProject).then((response:chatMessage[])=>{
+      console.log(response);
+    });
+  }  
 
   dataLocalStorage(): UserInfor {
     if (localStorage.length == 0) {

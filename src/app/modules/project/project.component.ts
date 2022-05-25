@@ -3,9 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 import { Task } from 'src/app/interfaces/task.interface';
 import { ProjectService } from './project.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { ReturnMessage } from '../../interfaces/general.interface';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { KeyValue, ReturnMessage } from '../../interfaces/general.interface';
 import { User } from '../../interfaces/user.interface';
 import { ProjectSingle } from '../../interfaces/project.interface';
+import { LoginService } from '../login/login.service';
+import { AuthService } from 'src/app/core/auth.service';
+import { SocketService } from '../chat/socket.service';
+import { ChatService } from '../chat/chat.service';
 
 @Component({
   selector: 'app-project',
@@ -13,8 +19,12 @@ import { ProjectSingle } from '../../interfaces/project.interface';
   styleUrls: ['./project.component.css']
 })
 export class ProjectComponent implements OnInit {
-
   faRightFromBracket = faArrowRight
+  faPlusCircle = faPlusCircle
+  faTrash = faTrash
+
+  subTasks: KeyValue[]= [];
+  subTask = '';
   projectSelected: ProjectSingle = {
     id_project:0,
     name_project:'',
@@ -32,15 +42,21 @@ export class ProjectComponent implements OnInit {
   descriptionTask:string = "";
   assignment:number=0;
   dateEnd:Date = new Date();
+  priorityTask:string = "";
 
   constructor(private activeRoute: ActivatedRoute,
-              private serviceProject: ProjectService) { }
+              private serviceProject: ProjectService,
+              private ChatService: ChatService) { }
 
   ngOnInit(): void {
+   
+
     this.activeRoute.params.subscribe(params=>{
       this.idProject = params['id'];
+       this.ChatService.getMessageByProjectUser(this.idProject);
       this.serviceProject.selectedProject$.subscribe((project:ProjectSingle)=>{
         this.projectSelected = project;
+  
       })
       this.listTasks();
     });
@@ -94,10 +110,21 @@ export class ProjectComponent implements OnInit {
   createTask(){
     this.serviceProject.createTask(this.nameTask, this.descriptionTask, 
                                   this.assignment,this.dateEnd,
-                                  this.idProject)
+                                  this.priorityTask,this.subTasks, this.idProject)
                                   .subscribe((response:ReturnMessage)=>{
 
       this.listTasks();
     })
+    this.clearFormModal();
+    this.subTasks = [];
+  }
+
+  addSubTask(){
+    this.subTasks.push({'value':this.subTasks.length+1,'name':this.subTask})
+    this.subTask = '';
+  }
+
+  deleteSubTask(id:number){
+    this.subTasks = this.subTasks.filter(({value})=> value != id)
   }
 }

@@ -3,3 +3,8 @@ export interface ReturnMessage {
     updateState:         boolean;
     message:             string;
 }
+
+export interface KeyValue {
+    name:          string;
+    value:         number;
+}

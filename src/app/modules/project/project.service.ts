@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Project, ProjectSingle } from '../../interfaces/project.interface';
-import { Task } from '../../interfaces/task.interface';
-import { ReturnMessage } from '../../interfaces/general.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { Task, TaskbPriority } from '../../interfaces/task.interface';
+import { KeyValue, ReturnMessage } from '../../interfaces/general.interface';
+import { User, UserInfor } from 'src/app/interfaces/user.interface';
 
 const initProject: ProjectSingle = {
   id_project: 0,
@@ -54,16 +54,21 @@ export class ProjectService {
   }
 
   createTask(nameTask:string, descriptionTask:string, assignment:number,
-      dateEnd: Date, idProject:number):Observable<ReturnMessage>{
+      dateEnd: Date, priorityTask:string,subTasks: KeyValue[], idProject:number):Observable<ReturnMessage>{
     const url = `${this.apiUrl}/tasks/createTask`;
     return this.http.post<ReturnMessage>(`${url}`, 
-    {nameTask,descriptionTask,assignment,dateEnd,idProject});
+    {nameTask,descriptionTask,assignment,dateEnd,priorityTask,subTasks, idProject});
   }
 
-  createProject(nameProject:string, descriptionProject:string, assignment:number[],
-    dateEnd: Date, idUser:number):Observable<ReturnMessage>{
-  const url = `${this.apiUrl}/projects/createProject`;
-  return this.http.post<ReturnMessage>(`${url}`, 
-  {nameProject,descriptionProject,assignment,dateEnd,idUser});
-}
+  createProject(nameProject:string, descriptionProject:string, assignment:UserInfor[],
+  dateEnd: Date, idUser:number):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/projects/createProject`;
+    return this.http.post<ReturnMessage>(`${url}`, 
+    {nameProject,descriptionProject,assignment,dateEnd,idUser});
+  }
+
+  getTaskPriorityByUser(idUser:number):Observable<never[]>{
+    const url = `${this.apiUrl}/tasks/getTaskPriorityByUser`;
+    return this.http.post<never[]>(`${url}`, {idUser});
+  }
 }

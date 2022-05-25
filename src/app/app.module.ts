@@ -9,13 +9,17 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PlataformComponent } from './modules/plataform/plataform.component'
 import { PlataformModule } from './modules/plataform/plataform.module';
+import { FooterComponent } from './modules/shared/footer/footer.component';
+import { VerifyComponent } from './modules/verify/verify.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    FooterComponent,
+    VerifyComponent
   ],
   imports: [
     BrowserModule,

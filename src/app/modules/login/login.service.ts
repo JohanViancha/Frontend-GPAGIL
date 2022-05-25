@@ -14,7 +14,8 @@ export class LoginService {
     id_user:       0,
     name_user:     '',
     lastname_user: '',
-    email_user:    ''
+    email_user:    '',
+    role_user:     0
   }
 
   get getUser():User{

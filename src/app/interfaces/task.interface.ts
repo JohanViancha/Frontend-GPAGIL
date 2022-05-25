@@ -19,4 +19,16 @@ export interface Task {
     email_user:           string;
     password_user:        string;
     img_user:             string;
+    priority_task:        string;
+}
+
+
+export enum Priority{
+    Baja=1,
+    Media=2,
+    Alta=3
+}
+export interface TaskbPriority {
+    priority:Priority,
+    count:number
 }

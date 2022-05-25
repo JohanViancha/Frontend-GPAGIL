@@ -8,6 +8,8 @@ import { MenuComponent } from '../shared/menu/menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ChatComponent } from '../chat/chat.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 
@@ -23,7 +25,9 @@ import { ChatComponent } from '../chat/chat.component';
     CommonModule,
     PlataformRoutingModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
   ]
 })
 export class PlataformModule { }

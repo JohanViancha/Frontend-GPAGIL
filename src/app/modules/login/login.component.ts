@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth.service';
 import Swal from 'sweetalert2';
 import { AlertsService } from '../../core/alerts.service';
 
@@ -31,19 +32,20 @@ export class LoginComponent implements OnInit {
   authentication() {    
 
     this.alertService.loading();
-
     this.loginService.authentication(this.user)
       .subscribe((userRe: ResponseAuth) => {
         Swal.close();
         if (userRe.state === 'correct') {  
           localStorage.setItem('userSe',JSON.stringify(userRe.user));    
-          this.loginService.setUser = userRe.user;  
           this.router.navigate(['plataform'])
+        }else if(userRe.state === 'no-verify'){
+          this.alertService.showAlert('info', 'Usuario no verificado', 'El usuario no ha sido verificado, por favor ingrese a su cuenta de correo registrada y verifique su usuario');
         }
+
         else if(userRe.state === 'requerid'){
-          this.alertService.showAlert('Error', 'Todos los campos son obligatorios');
+          this.alertService.showAlert('error', 'Error', 'Todos los campos son obligatorios');
         }else{
-          this.alertService.showAlert('Error', 'El usuario y/o contraseña son incorrectos');
+          this.alertService.showAlert('error', 'Error', 'El usuario y/o contraseña son incorrectos');
         }
       }, (error => { 
 

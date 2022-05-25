@@ -1,10 +1,11 @@
 export interface UserInfor{
-  id_user:       number;
+  id_user?:       number;
   name_user:     string;
   lastname_user: string;
   email_user:    string;
   password_user?: string;
   img_user?:      string;
+  tipo_user?:      number;
 }
 
 export interface User{
@@ -12,6 +13,7 @@ export interface User{
   name_user:     string;
   lastname_user: string;
   email_user:    string;
+  role_user?:    number;
 }
 
 export interface SearchUser{

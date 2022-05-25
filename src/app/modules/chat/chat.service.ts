@@ -6,8 +6,9 @@ import { SocketService } from './socket.service';
   providedIn: 'root'
 })
 export class ChatService {
-
-  constructor(private socketService: SocketService) { }
+  idUser: number =0;
+  constructor(private socketService: SocketService) { 
+  }
 
   getMessageByProjectUser(idProject:number):Promise<chatMessage[]>{
     return new Promise((resolve, reject)=>{
