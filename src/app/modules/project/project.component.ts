@@ -6,12 +6,15 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { KeyValue, ReturnMessage } from '../../interfaces/general.interface';
-import { User } from '../../interfaces/user.interface';
+import { User, UserInfor } from '../../interfaces/user.interface';
 import { ProjectSingle } from '../../interfaces/project.interface';
 import { LoginService } from '../login/login.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { SocketService } from '../chat/socket.service';
 import { ChatService } from '../chat/chat.service';
+import { SubTask } from '../../interfaces/task.interface';
+import { AlertsService } from '../../core/alerts.service';
+import { Project } from 'src/app/interfaces/project.interface';
 
 @Component({
   selector: 'app-project',
@@ -25,17 +28,21 @@ export class ProjectComponent implements OnInit {
 
   subTasks: KeyValue[]= [];
   subTask = '';
-  projectSelected: ProjectSingle = {
-    id_project:0,
-    name_project:'',
-    description_project:'',
-    id_user_project: 0
+  projectSelected: Project = {
+    id_project:          0,
+    name_project:        '',
+    description_project: '',
+    state_project:       '',
+    startdate_project:   new Date(),
+    enddate_project:     new Date(),
+    id_user_admin:       0,
+    id_user_project:     0
   };
   idProject: number = 0;
-  todo: Task[]= [];
-  done: Task[]= [];
-  doing: Task[] = [];
-  all:Task[] = [];
+  todo: any[]= [];
+  done: any[]= [];
+  doing: any[] = [];
+  all:any[] = [];
   usersAssignment: User[] = [];  
 
   nameTask:string = "";
@@ -43,20 +50,23 @@ export class ProjectComponent implements OnInit {
   assignment:number=0;
   dateEnd:Date = new Date();
   priorityTask:string = "";
-
+  userSe: UserInfor;
   constructor(private activeRoute: ActivatedRoute,
               private serviceProject: ProjectService,
-              private ChatService: ChatService) { }
+              private ChatService: ChatService,
+              private alertService: AlertsService) {
+                
+    this.userSe = JSON.parse(localStorage.getItem('userSe')!);
+
+  }
 
   ngOnInit(): void {
-   
-
+  
     this.activeRoute.params.subscribe(params=>{
       this.idProject = params['id'];
-       this.ChatService.getMessageByProjectUser(this.idProject);
-      this.serviceProject.selectedProject$.subscribe((project:ProjectSingle)=>{
+      this.ChatService.getMessageByProjectUser(this.idProject);
+      this.serviceProject.getProjectById(this.idProject).subscribe((project:Project)=>{
         this.projectSelected = project;
-  
       })
       this.listTasks();
     });
@@ -67,8 +77,21 @@ export class ProjectComponent implements OnInit {
     this.todo = [];
     this.done = [];
     this.doing = [];
-    this.serviceProject.getTaskByProject(this.idProject).subscribe((response: Task[])=>{
-    this.all = response;
+    this.serviceProject.getTaskByProject(this.idProject).subscribe((response: any)=>{
+    this.all = response.tasks.map((task:any)=>{
+        const subtask = response.subtasks.filter((subtask:any)=> subtask.id_task === task.id_task);
+        return {
+          ...task,
+          subtasks:subtask,  
+          progress: subtask.length == 0 ? 0 :response.subtasks.reduce((progress:number, subtask:any)=> {
+            if(subtask.id_task === task.id_task && subtask.state_subtask){
+              progress = 1 + progress;
+            }
+            return progress;
+          },0)* 100 /response.subtasks.filter((subtask:any)=> subtask.id_task === task.id_task).length
+        }
+    })
+
     this.all.forEach((task:Task)=>{
       switch(task.state_task){
         case '1':
@@ -105,6 +128,16 @@ export class ProjectComponent implements OnInit {
     this.descriptionTask = '';
     this.assignment = 0;
     this.dateEnd = new Date();
+  }
+
+  doSubTask(id:number,event:any){
+     this.alertService.questionAlert('Subtarea realizada','¿Seguro que desea marca como realizada está subtarea').then(({isConfirmed})=>{
+       if(isConfirmed){
+         this.serviceProject.updateStateSubTask(id).subscribe((response: ReturnMessage)=>{
+         })
+       }
+       this.listTasks();
+     })
   }
 
   createTask(){

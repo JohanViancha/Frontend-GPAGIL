@@ -32,14 +32,19 @@ export class ProjectService {
     this.project$.next(project);
   }
 
+  getProjectById(idProject:number):Observable<Project>{
+    const url = `${this.apiUrl}/projects/getProjectById`;
+    return this.http.post<Project>(`${url}`, {'idProject': idProject});
+
+  }
   getProjectByUsuario(id:number):Observable<Project[]>{
     const url = `${this.apiUrl}/projects/getProjectByUsuario`;
     return this.http.post<Project[]>(`${url}`, {'idUsuario': id});
   }
 
-  getTaskByProject(id:number):Observable<Task[]>{
+  getTaskByProject(id:number):Observable<any>{
     const url = `${this.apiUrl}/tasks/getTaskByProject`;
-    return this.http.post<Task[]>(`${url}`, {'idProject': id});
+    return this.http.post<any>(`${url}`, {'idProject': id});
   }
 
   updateStateTask(idTask: number, state:string):Observable<ReturnMessage>{
@@ -70,5 +75,10 @@ export class ProjectService {
   getTaskPriorityByUser(idUser:number):Observable<never[]>{
     const url = `${this.apiUrl}/tasks/getTaskPriorityByUser`;
     return this.http.post<never[]>(`${url}`, {idUser});
+  }
+
+  updateStateSubTask(idSubTask:number):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/tasks/updateStateSubTask`;
+    return this.http.post<ReturnMessage>(`${url}`, {idSubTask});
   }
 }

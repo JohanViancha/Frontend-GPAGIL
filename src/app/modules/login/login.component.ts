@@ -6,6 +6,7 @@ import { AlertsService } from '../../core/alerts.service';
 
 import { ResponseAuth, SearchUser, UserInfor } from '../../interfaces/user.interface';
 import { LoginService } from './login.service';
+import { ReturnMessage } from '../../interfaces/general.interface';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
         Swal.close();
         if (userRe.state === 'correct') {  
           localStorage.setItem('userSe',JSON.stringify(userRe.user));    
-          this.router.navigate(['plataform'])
+          this.router.navigate(['plataform/dashboard'])
         }else if(userRe.state === 'no-verify'){
           this.alertService.showAlert('info', 'Usuario no verificado', 'El usuario no ha sido verificado, por favor ingrese a su cuenta de correo registrada y verifique su usuario');
         }
@@ -58,5 +59,20 @@ export class LoginComponent implements OnInit {
     return JSON.parse(localStorage.getItem('userSe')!);
   }
 
+  recoverPassword(){
+    
+    this.alertService.recoverPassword()
+    .then((res)=>{
+      console.log(res);
+      if(res.value){
+        this.alertService.loading();
+        this.loginService.sendEmailForRecoverPassword(res.value).subscribe((res:ReturnMessage)=>{
+          
+          this.alertService.showAlert('success','Recuperación de contraseña', 'Se ha enviado un correo con codigo de seguridad para realizar el cambio de contraseña')
+        });
+      }
+
+    })
+  }
 
 }

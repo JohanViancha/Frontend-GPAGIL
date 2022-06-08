@@ -20,8 +20,17 @@ export interface Task {
     password_user:        string;
     img_user:             string;
     priority_task:        string;
+    subtask_task:         SubTask;
 }
 
+
+export interface SubTask {
+    id_task:              number;
+    id_subtask:           number;
+    name_subtask:         string;
+    time_subtask:         number;
+    state_subtask:        boolean;
+}
 
 export enum Priority{
     Baja=1,

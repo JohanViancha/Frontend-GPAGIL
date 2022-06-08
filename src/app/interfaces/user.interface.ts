@@ -5,7 +5,7 @@ export interface UserInfor{
   email_user:    string;
   password_user?: string;
   img_user?:      string;
-  tipo_user?:      number;
+  id_role?:      number;
 }
 
 export interface User{

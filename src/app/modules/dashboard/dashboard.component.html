@@ -1,18 +1,48 @@
-<div class="container-fluid">
-<ngx-charts-bar-horizontal class="fs-3"
-  [view]="view"
-  [scheme]="colorScheme"
-  [results]="single"
-  [gradient]="gradient"
-  [xAxis]="showXAxis"
-  [yAxis]="showYAxis"
-  [legend]="showLegend"
-  legendTitle="Prioridades"
-  [showXAxisLabel]="showXAxisLabel"
-  [showYAxisLabel]="showYAxisLabel"
-  [xAxisLabel]="xAxisLabel"
-  [yAxisLabel]="yAxisLabel"
-  (select)="onSelect($event)"
-  (activate)="onActivate($event)"
-  (deactivate)="onDeactivate($event)">
-</ngx-charts-bar-horizontal></div>
+<div class="container-fluid mt-3">
+
+  <div class="card">
+    <div class="card-header">
+      Mis tareas por prioridad
+    </div>
+      <div class="card-body">
+        <ngx-charts-bar-horizontal class="fs-3"
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        legendTitle="Prioridades"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)">
+        </ngx-charts-bar-horizontal>
+      </div>
+    </div>
+
+
+  <div class="card">
+    <div class="card-header">
+      Progreso por proyecto
+    </div>
+      <div class="card-body">
+        <ngx-charts-pie-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [labels]="true"
+        [legend]="showLegend"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+        >
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import { LoginComponent } from './modules/login/login.component';
 import { RegisterComponent } from './modules/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlataformComponent } from './modules/plataform/plataform.component'
 import { PlataformModule } from './modules/plataform/plataform.module';
 import { FooterComponent } from './modules/shared/footer/footer.component';
@@ -26,7 +27,8 @@ import { VerifyComponent } from './modules/verify/verify.component';
     AppRoutingModule,
     HttpClientModule,
     PlataformModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

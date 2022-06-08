@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterUser } from '../../interfaces/user.interface';
 import { RegisterService } from './register.service';
 import { UserInfor } from 'src/app/interfaces/user.interface';
 import { AlertsService } from 'src/app/core/alerts.service';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-register',
@@ -11,12 +11,13 @@ import { AlertsService } from 'src/app/core/alerts.service';
 })
 export class RegisterComponent implements OnInit {
 
+  faArrowLeft = faArrowLeft
   user:UserInfor = {
     name_user:'',
     lastname_user:'',
     email_user:'',
     password_user:'',
-    tipo_user :0
+    id_role :0
   }
 
   passwordUserRepeit = "";

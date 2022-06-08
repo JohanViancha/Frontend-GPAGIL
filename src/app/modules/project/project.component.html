@@ -3,10 +3,12 @@
 <div class="container-fluid mt-4">
     <h2 class="text-center">{{projectSelected.name_project}}</h2>
     <p class="text-center fs-5">{{projectSelected.description_project}}</p>
-    <button class="btn btn-light border-dark my-2" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Crear tarea</button>
+    <button *ngIf="userSe.id_role == 1" class="btn btn-light border-dark my-2" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Crear tarea</button>
+    <button *ngIf="userSe.id_role == 2" class="invisible btn btn-light border-dark my-2">Crear tarea</button>
+    <button class="btn btn-light border-dark my-2 float-end me-4" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Finalizar proyecto</button>
 
   
-    <div class="row align-items-start">
+    <div class="row align-items-start container-table">
       <div class="col-12 col-sm-12 col-md-4">
         <div class="card border-secondary mb-3">
           <div class="card-header badge bg-secondary fs-5 text-center">Por hacer</div>
@@ -14,87 +16,136 @@
             No hay tareas por hacer
           </div>
           <div class="card-body" *ngIf="todo.length>0">
-            <div *ngFor="let taskTodo of todo" class="card mb-2">
+            <div *ngFor="let taskTodo of todo" class="card mb-4">
               <div class="card-header">
                 <h5 class="card-title">{{taskTodo.name_task}}</h5>
               </div>           
               <div class="card-body">
-                <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskTodo.name_user }} {{taskTodo.lastname_user }}</h6>
-                <h6 *ngIf="taskTodo.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
-                <h6 *ngIf="taskTodo.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
-                <h6 *ngIf="taskTodo.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>
+                <div class="d-flex justify-content-between">
+                  <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskTodo.name_user }} {{taskTodo.lastname_user }}</h6>
+                  <h6 *ngIf="taskTodo.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
+                  <h6 *ngIf="taskTodo.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
+                  <h6 *ngIf="taskTodo.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>
+                </div>
+                
                 <p class="card-text">{{taskTodo.description_task}}</p>
                 <p class="card-text">{{taskTodo.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
+                <hr>
+                <label class="fw-bold">Subtareas</label>
+                <ul class="list-group list-group-flush" *ngIf="taskTodo.subtasks.length > 0">
+                    <li class="list-group-item" *ngFor="let subtask of taskTodo.subtasks">
+                          {{subtask.name_subtask}}
+                    </li>  
+                  </ul>
+                <p *ngIf="taskTodo.subtasks.length ==0">No hay subtareas creadas</p>
+
                 <button class="btn btn-secondary me-2">Ver detalle</button>
                 <button class="btn btn-primary" (click)="updateStateTask(taskTodo.id_task,'2')">Hacer tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
               </div>
               <div class="card-footer">
                 <label for="progress">Progreso</label>
                 <div class="progress" style="height: 20px;">
-                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{'width': taskTodo.progress+'%'}" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                  <label class="fw-bold mx-1">{{taskTodo.progress}}%</label>
                 </div>
+               
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-12 col-sm-12 col-md-4">
-        <div class="card border-primary mb-3">
+        <div class="card border-primary">
           <div class="card-header badge bg-primary fs-5 text-center">Haciendo</div>
           <div *ngIf="doing.length==0" class="card-body text-center">
             No hay tareas por hacer
           </div>
-          <div class="card-body" *ngIf="doing.length>0">
-            <div *ngFor="let taskDoing of doing" class="card">
+          <div class="card-body mb-3" *ngIf="doing.length>0">
+            <div *ngFor="let taskDoing of doing" class="card mb-4">
               <div class="card-header">
                 <h5 class="card-title">{{taskDoing.name_task}}</h5>
               </div>
               <div class="card-body">
-                
-                <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDoing.name_user }} {{taskDoing.lastname_user }}</h6>
-                <h6 *ngIf="taskDoing.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
-                <h6 *ngIf="taskDoing.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
-                <h6 *ngIf="taskDoing.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>                <p class="card-text">{{taskDoing.description_task}}</p>
+                <div class="d-flex justify-content-between">
+                  <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDoing.name_user }} {{taskDoing.lastname_user }}</h6>
+                  <h6 *ngIf="taskDoing.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
+                  <h6 *ngIf="taskDoing.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
+                  <h6 *ngIf="taskDoing.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>
+                </div>
+                <p class="card-text">{{taskDoing.description_task}}</p>
                 <p class="card-text">{{taskDoing.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
+                <hr>
+                <label class="fw-bold">Subtareas</label>
+                <ul class="list-group list-group-flush" *ngIf="taskDoing.subtasks.length > 0">
+                    <li class="list-group-item" *ngFor="let subtask of taskDoing.subtasks">
+                      <div class="form-check" >
+                        <input class="form-check-input" [disabled]="subtask.state_subtask" [checked]="subtask.state_subtask" (change)="doSubTask(subtask.id_subtask,$event)" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          {{subtask.name_subtask}}
+                        </label>
+                      </div>
+                    </li>  
+                  </ul>
+                <p *ngIf="taskDoing.subtasks.length ==0">No hay subtareas creadas</p>
                 <button class="btn btn-secondary me-2">Ver detalle</button>
                 <button class="btn btn-success" (click)="updateStateTask(taskDoing.id_task,'3')">Terminar tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
               </div>
               <div class="card-footer">
                 <label for="progress">Progreso</label>
                 <div class="progress" style="height: 20px;">
-             
-                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{'width': taskDoing.progress+'%'}" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                  <label class="fw-bold mx-1">{{taskDoing.progress}}%</label>
                 </div>
+               
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-12 col-sm-12 col-md-4">
-        <div class="card border-success mb-3">
+        <div class="card border-success">
           <div class="card-header badge bg-success fs-5 text-center">Hecho</div>
           <div *ngIf="done.length==0" class="card-body text-center">
             No hay tareas hechas
           </div>
           <div class="card-body" *ngIf="done.length>0">
-            <div *ngFor="let taskDone of done" class="card">
+            <div *ngFor="let taskDone of done" class="card mb-4">
               <div class="card-header">
                 <h5 class="card-title">{{taskDone.name_task}}</h5>
               </div>
               <div class="card-body">
-                <h5 class="card-title">{{taskDone.name_task}}</h5>
-                <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDone.name_user }} {{taskDone.lastname_user }}</h6>
-                <h6 *ngIf="taskDone.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
-                <h6 *ngIf="taskDone.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
-                <h6 *ngIf="taskDone.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>                <p class="card-text">{{taskDone.description_task}}</p>
+                <div class="d-flex justify-content-between">
+                  <h6 class="card-subtitle mb-2 badge bg-secondary">{{taskDone.name_user }} {{taskDone.lastname_user }}</h6>
+                  <h6 *ngIf="taskDone.priority_task == '1'" class="card-subtitle mb-2 badge float-end bg-success">Baja</h6>
+                  <h6 *ngIf="taskDone.priority_task == '2'" class="card-subtitle mb-2 badge float-end bg-warning">Media</h6>
+                  <h6 *ngIf="taskDone.priority_task == '3'" class="card-subtitle mb-2 badge float-end bg-danger">Alta</h6>                
+                </div>
+                
+                <p class="card-text">{{taskDone.description_task}}</p>
                 <p class="card-text">{{taskDone.end_date_task | date:'dd/MM/yy HH:mm'}}</p>
+                <hr>
+                <label class="fw-bold">Subtareas</label>
+                <ul class="list-group list-group-flush" *ngIf="taskDone.subtasks.length > 0">
+                  <li class="list-group-item" *ngFor="let subtask of taskDone.subtasks">
+                    <div class="form-check" >
+                      <input class="form-check-input" disabled type="checkbox" value="" id="flexCheckDefault">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        {{subtask.name_subtask}}
+                      </label>
+                    </div>
+                        
+                  </li>  
+                </ul>
+                <p *ngIf="taskDone.subtasks.length ==0">No hay subtareas creadas</p>
                 <button class="btn btn-secondary">Ver detalle</button>
               </div>
               <div class="card-footer">
                 <label for="progress">Progreso</label>
-                <div class="progress" style="height: 20px;">            
-                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                <div class="progress" style="height: 20px;">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{'width': taskDone.progress+'%'}" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                  <label class="fw-bold mx-1">{{taskDone.progress}}%</label>
                 </div>
+               
               </div>
             </div>
           </div>

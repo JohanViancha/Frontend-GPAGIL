@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ResponseAuth, SearchUser, User, UserInfor } from '../../interfaces/user.interface';
+import { ReturnMessage } from 'src/app/interfaces/general.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,11 @@ export class LoginService {
   authentication(user: SearchUser): Observable<ResponseAuth>{
     const url = `${this.apiUrl}/users/getUserByAuthentication`;
     return this.http.post<ResponseAuth>(url, user);
+  }
+
+  sendEmailForRecoverPassword(email:string):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/users/sendEmailForRecoverPassword`;
+    return this.http.post<ReturnMessage>(url, {email});
   }
 
 }

@@ -8,7 +8,7 @@ import { ProjectService } from '../project/project.service';
 })
 export class DashboardComponent implements OnInit {
 
-  view: [number,number] = [700, 400];
+  view: [number,number] = [1300, 400];
   
 
   // options
@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
 
   single = [];
 
+  
   constructor(private serviceProject: ProjectService) {
    
   }
