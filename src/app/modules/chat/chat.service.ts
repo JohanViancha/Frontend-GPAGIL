@@ -1,42 +1,42 @@
 import { Injectable } from '@angular/core';
+import { Subject, Observable, Subscriber } from 'rxjs';
 import { chatMessage } from 'src/app/interfaces/chat.interface';
 import { SocketService } from './socket.service';
+import { SubTask } from '../../interfaces/task.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   idUser: number =0;
+  chat = new Subject<chatMessage[]>();
+
   constructor(private socketService: SocketService) { 
+    this.socketService.io.on('getAllMessage', (data:chatMessage[])=>{
+      this.chat.next(data);
+    })
   }
 
-  getMessageByProjectUser(idProject:number):Promise<chatMessage[]>{
-    return new Promise((resolve, reject)=>{
-      try{
-        this.socketService.io.emit("getMessageByProjectUser", idProject);
-        this.socketService.io.on('getMessageByProjectUser',(messages)=>{
-           resolve(messages);
-        })
-      }catch(err){
-        reject(err);
-      }
-     
+  
+  getMessage(){
+    return new Observable((Subscriber)=>{
+      this.socketService.io.emit('getAllMessage')
+      this.socketService.io.on('getAllMessage', (data:chatMessage[])=>{
+        Subscriber.next(data);
+        this.chat.next(data);
+      })
     })
-   
   }
 
   sendMessageByProjectUser(idUserProject:number, message:string):Promise<chatMessage[]>{
-    return new Promise((resolve, reject)=>{
+
+    return new Promise((resolve,reject)=>{
       try{
         this.socketService.io.emit("sendMessageByProjectUser", {idUserProject:idUserProject,
           message:message});
-        this.socketService.io.on('sendMessageByProjectUser',(response)=>{
-           resolve(response);
-        })
       }catch(err){
-        reject(err);
+        console.log(err);
       }
-     
     })
    
   }

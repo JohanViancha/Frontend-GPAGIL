@@ -45,4 +45,19 @@ export class LoginService {
     return this.http.post<ReturnMessage>(url, {email});
   }
 
+  verifyCodeSecurity(code:string):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/users/verifyCodeSecurity`;
+    return this.http.post<ReturnMessage>(url, {code});
+  }
+
+  updatePassword(email:string,password:string):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/users/updatePassword`;
+    return this.http.post<ReturnMessage>(url, {email,password});
+  }
+
+  clearCodeSecurity(email:string):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/users/clearCodeSecurity`;
+    return this.http.post<ReturnMessage>(url, {email});
+  }
+
 }

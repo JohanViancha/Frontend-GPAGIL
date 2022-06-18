@@ -28,6 +28,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FormsModule,
     NgxChartsModule,
     BrowserAnimationsModule
-  ]
+  ],
 })
 export class PlataformModule { }

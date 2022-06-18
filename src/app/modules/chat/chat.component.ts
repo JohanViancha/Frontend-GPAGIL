@@ -5,6 +5,7 @@ import { ChatService } from './chat.service';
 import { ProjectService } from '../project/project.service';
 import { ProjectSingle, Project } from '../../interfaces/project.interface';
 import { LoginService } from '../login/login.service';
+import { SocketService } from './socket.service';
 
 
 @Component({
@@ -24,38 +25,50 @@ export class ChatComponent implements OnInit {
   messages: chatMessage[] = [];
   message: string = "";
   constructor(private serviceChat:ChatService,
-              private serviceProject: ProjectService,
-              private serviceUser: LoginService) { }
+              private serviceProject: ProjectService) {
+                
+  }
 
   faMessage = faMessage;
   faClock = faClock;
   faUser = faUser;
   ngOnInit(): void {
     this.serviceProject.selectedProject$.subscribe((project:ProjectSingle)=>{
-      this.projectSelected = project;
+      this.projectSelected = { ... project}
     })
+    this.serviceChat.chat.subscribe((data)=>{
+      this.messages =  this.orderMessage(data)
+    })
+   
   }
 
   openModalChat():void{
     this.openChat = !this.openChat;
     if(this.openChat){
-    this.showMessages();
+      this.serviceChat.getMessage().subscribe((data:any)=>{
+        this.messages = this.orderMessage(data);
+      })
     }
   }
 
-  showMessages(){
-    this.message = '';
-    this.serviceChat.getMessageByProjectUser(this.projectSelected.id_project).then((response:chatMessage[])=>{
-      this.messages = response;
-    });
-  }  
-
 
   sendMessage(){
-    this.serviceChat.sendMessageByProjectUser(this.projectSelected.id_user_project,this.message).then((message)=>{
-      console.log('asfasf');
-        this.showMessages();
-    })
+    this.serviceChat.sendMessageByProjectUser(this.projectSelected.id_user_project,this.message);
+    this.message='';
+  }
+  
+  orderMessage(message: chatMessage[]){
+    console.log(message);
+    console.log(this.projectSelected);
+    return message.filter((chat)=>{
+      if(chat.id_project == this.projectSelected.id_project){
+        return chat;
+      }
+      return '';
+    }
+    )
+    .sort((a,b)=> new Date(b.datetime_send).getTime() - new Date(a.datetime_send).getTime())
+
   }
 
 }

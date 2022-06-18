@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../project/project.service';
+import { Project } from 'src/app/interfaces/project.interface';
+import { TaskAssigment } from 'src/app/interfaces/task.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +11,11 @@ import { ProjectService } from '../project/project.service';
 })
 export class DashboardComponent implements OnInit {
 
-  view: [number,number] = [1300, 400];
-  
-
+  view: [number,number] = [650, 300];
+  idUser:any = 0;
+  projects: Project[] = [];
+  project: any = 0;
+  tasksAssignment:TaskAssigment[] = []
   // options
   showXAxis: boolean = true;
   showYAxis: boolean = true;
@@ -25,16 +30,29 @@ export class DashboardComponent implements OnInit {
     domain: ['#198754', '#ffc107', '#dc3545', ]
   };
 
-  single = [];
+  colorSchemeTasks:any = {
+    domain: ['#6c757d', '#0d6efd', '#198754', ]
+  };
 
-  
-  constructor(private serviceProject: ProjectService) {
+  single = [];
+  tasks = [];
+  constructor(private serviceProject: ProjectService,
+    private router: Router) {
    
   }
   ngOnInit(): void {
-    const {id_user} = JSON.parse(localStorage.getItem('userSe')!);
-    this.serviceProject.getTaskPriorityByUser(id_user).subscribe((data)=>{
+    this.idUser = JSON.parse(localStorage.getItem('userSe')!);
+    this.serviceProject.getTaskPriorityByUser(this.idUser.id_user).subscribe((data)=>{
       this.single = data;
+    })
+
+    this.serviceProject.getProjectByUsuario(this.idUser.id_user).subscribe((data)=>{
+      this.projects = data;
+    })
+
+    this.serviceProject.getTaskByAssignment(this.idUser.id_user).subscribe((data:any)=>{
+      console.log(data);
+      this.tasksAssignment = data;
     })
   }
   
@@ -43,10 +61,41 @@ export class DashboardComponent implements OnInit {
   }
 
   onActivate(data:any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
   }
 
   onDeactivate(data:any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  }
+
+  goTask(idProject:number){
+    this.router.navigate(['plataform/project', idProject]);
+  }
+
+  selectProject(){
+    this.serviceProject.getTaskByProject(this.project).subscribe((data)=>{
+      this.tasks = data.tasks.map((task:any)=>{
+        return{
+          name: task.name_task,
+          state: task.state_task
+        }
+      })
+      .reduce((tasks:any, current:any)=>{
+        switch(current.state){
+            case '1':
+              tasks[0].value = tasks[0].value+1;
+            break;
+            case '2':
+            case '3':
+              tasks[1].value = tasks[1].value+1;
+            break;
+            case '4':
+              tasks[2].value = tasks[2].value+1;
+            break;
+        }
+        console.log(tasks);
+        return tasks;
+    },[{'name':'Por hacer','value':0},{'name':'Haciendo','value':0},{'name':'Hecho', 'value':0}])
+
+  })
+  
   }
 }

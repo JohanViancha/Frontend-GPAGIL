@@ -1,7 +1,7 @@
-<div class="container-fluid mt-3">
+<div class="container-fluid row mt-3">
 
-  <div class="card">
-    <div class="card-header">
+  <div class="card col-12 col-md-12 col-lg-12 col-xl-6">
+    <div class="card-header fs-6 fw-bold">
       Mis tareas por prioridad
     </div>
       <div class="card-body">
@@ -26,17 +26,24 @@
     </div>
 
 
-  <div class="card">
-    <div class="card-header">
+  <div class="card col-12 col-md-12 col-lg-12 col-xl-6">
+    <div class="card-header fs-6 fw-bold">
       Progreso por proyecto
     </div>
       <div class="card-body">
+        <select (change)="selectProject()" class="form-select" [(ngModel)]="project">
+          <option selected value="0">Selecciona un proyecto</option>
+          <option  *ngFor="let project of projects" [value]="project.id_project">{{project.name_project}}</option>
+        </select>
+        <br>
         <ngx-charts-pie-chart
         [view]="view"
-        [scheme]="colorScheme"
-        [results]="single"
+        [scheme]="colorSchemeTasks"
+        [results]="tasks"
         [gradient]="gradient"
         [labels]="true"
+        [explodeSlices]="true"
+        legendTitle="Tareas"
         [legend]="showLegend"
         (select)="onSelect($event)"
         (activate)="onActivate($event)"
@@ -45,4 +52,32 @@
       </ngx-charts-pie-chart>
     </div>
   </div>
+
+  <div class="container-fluid mt-3 content-table-task">
+    <table class="table table-responsive table-striped table-hover caption-top">
+      <caption class="fs-6 fw-bold">Lista de tareas asignadas</caption>
+      <thead class="bg-primary text-white p-2">
+        <tr>
+          <td>Nombre del proyecto</td>
+          <td>Nombre de la tarea</td>
+          <td>Estado</td>
+          <td>Prioridad</td>
+          <td>Fecha y hora de entrega</td>
+          <td></td>
+        </tr>
+        
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasksAssignment">
+          <td>{{task.name_project}}</td>
+          <td>{{task.name_task}}</td>
+          <td>{{task.state_task}}</td>
+          <td>{{task.priority_task}}</td>
+          <td>{{task.end_date_task | date:'dd/MM/yy HH:mm'}}</td>
+          <td><button class="btn btn-outline-primary" (click)="goTask(task.id_project)">Ver tarea</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>

@@ -60,18 +60,36 @@ export class LoginComponent implements OnInit {
   }
 
   recoverPassword(){
-    
-    this.alertService.recoverPassword()
-    .then((res)=>{
-      console.log(res);
-      if(res.value){
-        this.alertService.loading();
-        this.loginService.sendEmailForRecoverPassword(res.value).subscribe((res:ReturnMessage)=>{
-          
-          this.alertService.showAlert('success','Recuperación de contraseña', 'Se ha enviado un correo con codigo de seguridad para realizar el cambio de contraseña')
-        });
-      }
+    let userEmail:string ='';
+    this.alertService.changePasswordAlert().subscribe((data:any)=>{
+      switch(data.step){
+        
+        case 1:
+          userEmail = data.value;
+          this.loginService.sendEmailForRecoverPassword(data.value).subscribe(()=>{
+          });
+        break;
+        case 2:
+          this.loginService.verifyCodeSecurity(data.value).subscribe((response)=>{
+            this.alertService.setvalidationPassword(response.updateState);
+          });
+        break;
+        
+        // @ts-ignore
+        case 3:
+          this.loginService.updatePassword(userEmail,data.value).subscribe((response)=>{
+            if(response.updateState){
+              this.alertService.showAlert('success','Recuperación de contraseña', 'La contraseña ha sido actualizada');
+            }
+          });
+        default:
+          this.loginService.clearCodeSecurity(userEmail).subscribe((response)=>{
+            console.log(response);
+          });
 
+        break;
+      }
+     
     })
   }
 

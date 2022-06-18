@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Project, ProjectSingle } from '../../interfaces/project.interface';
 import { Task, TaskbPriority } from '../../interfaces/task.interface';
@@ -37,9 +37,20 @@ export class ProjectService {
     return this.http.post<Project>(`${url}`, {'idProject': idProject});
 
   }
+
+  getProjectByIdUserIdProject(idProject:number, idUser:number):Observable<Project>{
+    const url = `${this.apiUrl}/projects/getProjectByIdUserIdProject`;
+    return this.http.post<Project>(`${url}`, {'idProject': idProject,'idUser':idUser});
+
+  }
   getProjectByUsuario(id:number):Observable<Project[]>{
     const url = `${this.apiUrl}/projects/getProjectByUsuario`;
     return this.http.post<Project[]>(`${url}`, {'idUsuario': id});
+  }
+
+  getTaskByAssignment(idUser:number):Observable<any>{
+    const url = `${this.apiUrl}/tasks/getTaskByAssignment`;
+    return this.http.post<any>(`${url}`, {idUser});
   }
 
   getTaskByProject(id:number):Observable<any>{
@@ -80,5 +91,10 @@ export class ProjectService {
   updateStateSubTask(idSubTask:number):Observable<ReturnMessage>{
     const url = `${this.apiUrl}/tasks/updateStateSubTask`;
     return this.http.post<ReturnMessage>(`${url}`, {idSubTask});
+  }
+
+  finishProjectById(idProyect:number):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/projects/finishProjectById`;
+    return this.http.put<ReturnMessage>(`${url}`, {idProyect});
   }
 }

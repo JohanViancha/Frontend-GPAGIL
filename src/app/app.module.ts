@@ -12,6 +12,9 @@ import { PlataformComponent } from './modules/plataform/plataform.component'
 import { PlataformModule } from './modules/plataform/plataform.module';
 import { FooterComponent } from './modules/shared/footer/footer.component';
 import { VerifyComponent } from './modules/verify/verify.component';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideStorage,getStorage } from '@angular/fire/storage';
 
 
 @NgModule({
@@ -28,7 +31,9 @@ import { VerifyComponent } from './modules/verify/verify.component';
     HttpClientModule,
     PlataformModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideStorage(() => getStorage())
   ],
   providers: [],
   bootstrap: [AppComponent]

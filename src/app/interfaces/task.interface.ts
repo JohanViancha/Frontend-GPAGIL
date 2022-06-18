@@ -32,6 +32,18 @@ export interface SubTask {
     state_subtask:        boolean;
 }
 
+
+export interface TaskAssigment {
+    id_user_task:         number;
+    id_project:           number;
+    name_project:         string;
+    name_task:            string;
+    priority_task:        string;
+    state_task:           string;
+    end_date_task:         Date;
+}
+
+
 export enum Priority{
     Baja=1,
     Media=2,

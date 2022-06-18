@@ -9,8 +9,8 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { LoginService } from '../../login/login.service';
 import { AlertsService } from '../../../core/alerts.service';
-import { ChatService } from '../../chat/chat.service';
-import { chatMessage } from 'src/app/interfaces/chat.interface';
+import { Storage, ref, uploadBytes, listAll,getDownloadURL, list } from '@angular/fire/storage'
+
 
 @Component({
   selector: 'app-menu',
@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
 
   proyects: Project[] = [];
   userSe: UserInfor;
+  imgPreview: string | ArrayBuffer = '';
   faPlusCircle = faPlusCircle
   faExclamationCircle = faExclamationCircle
   nameProject:string = "";
@@ -33,19 +34,29 @@ export class MenuComponent implements OnInit {
               private serviceProject: ProjectService,
               private serviceLogin: LoginService,
               private alertService: AlertsService,
-              private serviceChat: ChatService) {
+              private storage: Storage) {
 
     this.userSe = this.dataLocalStorage();
   }
 
   ngOnInit(): void {  
     this.getProjectByUser(this.userSe.id_user!);
+
+    const imageRef = ref(this.storage, 'images');
+    listAll(imageRef)
+    .then(async (res)=>{
+      const url = res.items.filter((img:any)=>img._location.path == this.userSe.img_user)
+     this.imgPreview = await getDownloadURL(url[0]);
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+
   }
 
   async getProjectByUser(id_user:number){
-    console.log(id_user);
     await this.serviceProject.getProjectByUsuario(id_user).subscribe(response=>{
-      console.log(response);
       this.proyects = response;
       })
   }
@@ -64,12 +75,11 @@ export class MenuComponent implements OnInit {
     }
     this.serviceProject.setProject(projectSingle);
     this.router.navigate(['plataform/project', id]);
-    this.showMessages(id)
   }
 
   async saveProject(){
-    const userSelect = this.allUsers.filter((user)=>{
-      if(this.assignmentUserProject.includes(user.id_user!)){
+    const userSelect = await this.allUsers.filter(async (user)=>{
+      if(await this.assignmentUserProject.includes(user.id_user!)){
         return user;
       }
       return;
@@ -95,12 +105,6 @@ export class MenuComponent implements OnInit {
     this.openModal();
     this.dateEndProject = new Date();
   }
-
-  showMessages(idProject:number){
-    this.serviceChat.getMessageByProjectUser(idProject).then((response:chatMessage[])=>{
-      console.log(response);
-    });
-  }  
 
   dataLocalStorage(): UserInfor {
     if (localStorage.length == 0) {

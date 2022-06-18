@@ -3,9 +3,9 @@
 <div class="container-fluid mt-4">
     <h2 class="text-center">{{projectSelected.name_project}}</h2>
     <p class="text-center fs-5">{{projectSelected.description_project}}</p>
-    <button *ngIf="userSe.id_role == 1" class="btn btn-light border-dark my-2" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Crear tarea</button>
-    <button *ngIf="userSe.id_role == 2" class="invisible btn btn-light border-dark my-2">Crear tarea</button>
-    <button class="btn btn-light border-dark my-2 float-end me-4" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Finalizar proyecto</button>
+    <div [ngClass]="projectSelected.state_project=='1'?'bg-primary' : 'bg-success'" class="m-auto p-2 text-white text-center fs-5 w-25 ">{{projectSelected.state_project=='1'? 'Proyecto en progreso':'Projecto finalizado'}}</div>
+    <button [ngStyle]="{visibility: userSe.id_role == 1 && projectSelected.state_project == '1'?'visible':'hidden'}" class="btn btn-light border-dark my-2" (click)="showModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Crear tarea</button>
+    <button [ngStyle]="{visibility:todo.length == 0 && doing.length == 0 && done.length > 0 && projectSelected.state_project == '1'?'visible':'hidden'}" class="btn btn-light border-dark my-2 float-end me-4" (click)="finishProject(projectSelected.id_project)">Finalizar proyecto</button>
 
   
     <div class="row align-items-start container-table">
@@ -33,14 +33,13 @@
                 <hr>
                 <label class="fw-bold">Subtareas</label>
                 <ul class="list-group list-group-flush" *ngIf="taskTodo.subtasks.length > 0">
-                    <li class="list-group-item" *ngFor="let subtask of taskTodo.subtasks">
+                    <li class="text-break list-group-item" *ngFor="let subtask of taskTodo.subtasks">
                           {{subtask.name_subtask}}
                     </li>  
                   </ul>
                 <p *ngIf="taskTodo.subtasks.length ==0">No hay subtareas creadas</p>
 
-                <button class="btn btn-secondary me-2">Ver detalle</button>
-                <button class="btn btn-primary" (click)="updateStateTask(taskTodo.id_task,'2')">Hacer tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+                <button class="btn btn-primary" [disabled]="userSe.id_role == 2 && userSe.id_user != taskTodo.id_user" (click)="updateStateTask(taskTodo.id_task,'2')">Hacer tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
               </div>
               <div class="card-footer">
                 <label for="progress">Progreso</label>
@@ -77,9 +76,9 @@
                 <hr>
                 <label class="fw-bold">Subtareas</label>
                 <ul class="list-group list-group-flush" *ngIf="taskDoing.subtasks.length > 0">
-                    <li class="list-group-item" *ngFor="let subtask of taskDoing.subtasks">
+                    <li class="text-break list-group-item" *ngFor="let subtask of taskDoing.subtasks">
                       <div class="form-check" >
-                        <input class="form-check-input" [disabled]="subtask.state_subtask" [checked]="subtask.state_subtask" (change)="doSubTask(subtask.id_subtask,$event)" type="checkbox" value="" id="flexCheckDefault">
+                        <input class="form-check-input" [disabled]="subtask.state_subtask || userSe.id_user != taskDoing.id_user" [checked]="subtask.state_subtask" (change)="doSubTask(subtask.id_subtask,$event)" type="checkbox" value="" id="flexCheckDefault">
                         <label class="form-check-label" for="flexCheckDefault">
                           {{subtask.name_subtask}}
                         </label>
@@ -87,8 +86,14 @@
                     </li>  
                   </ul>
                 <p *ngIf="taskDoing.subtasks.length ==0">No hay subtareas creadas</p>
-                <button class="btn btn-secondary me-2">Ver detalle</button>
-                <button class="btn btn-success" (click)="updateStateTask(taskDoing.id_task,'3')">Terminar tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+                <div class="d-flex justify-content-between">
+                  <button [disabled]="userSe.id_role == 2 && userSe.id_user != taskDoing.id_user"  *ngIf="taskDoing.state_task == '2'" class="btn btn-success" (click)="updateStateTask(taskDoing.id_task,'3')">Terminar tarea <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+                  <button [disabled]="userSe.id_role == 2" *ngIf="taskDoing.state_task == '3'" class="btn btn-outline-success" (click)="updateStateTask(taskDoing.id_task,'4')">Por aprobar <fa-icon [icon]="faRightFromBracket"></fa-icon></button>
+                  <button [disabled]="userSe.id_role == 2" *ngIf="taskDoing.state_task == '3'" class="btn btn-outline-danger" (click)="updateStateTask(taskDoing.id_task,'2')">Por rechazar <fa-icon [icon]="faArrowLeft"></fa-icon></button>
+
+                </div>
+                
+
               </div>
               <div class="card-footer">
                 <label for="progress">Progreso</label>
@@ -126,9 +131,9 @@
                 <hr>
                 <label class="fw-bold">Subtareas</label>
                 <ul class="list-group list-group-flush" *ngIf="taskDone.subtasks.length > 0">
-                  <li class="list-group-item" *ngFor="let subtask of taskDone.subtasks">
+                  <li class="text-break list-group-item" *ngFor="let subtask of taskDone.subtasks">
                     <div class="form-check" >
-                      <input class="form-check-input" disabled type="checkbox" value="" id="flexCheckDefault">
+                      <input class="form-check-input" [checked]="subtask.state_subtask" disabled type="checkbox" value="" id="flexCheckDefault">
                       <label class="form-check-label" for="flexCheckDefault">
                         {{subtask.name_subtask}}
                       </label>
@@ -137,7 +142,6 @@
                   </li>  
                 </ul>
                 <p *ngIf="taskDone.subtasks.length ==0">No hay subtareas creadas</p>
-                <button class="btn btn-secondary">Ver detalle</button>
               </div>
               <div class="card-footer">
                 <label for="progress">Progreso</label>
@@ -215,7 +219,7 @@
 
               <ul *ngIf="subTasks.length > 0" class="list-group mt-2">
                 
-                <li class="list-group-item" *ngFor="let subTask of subTasks"> <button class="btn"><fa-icon class="text-danger" (click)="deleteSubTask(subTask.value)" [icon]="faTrash"></fa-icon></button>{{subTask.name}}  
+                <li class="list-group-item text-break" *ngFor="let subTask of subTasks"> <button class="btn"><fa-icon class="text-danger" (click)="deleteSubTask(subTask.value)" [icon]="faTrash"></fa-icon></button>{{subTask.name}}  
                 </li> 
               </ul>
               

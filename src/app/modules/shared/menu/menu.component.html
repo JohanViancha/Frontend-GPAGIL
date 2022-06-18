@@ -29,11 +29,17 @@
               </li>
             </ul>
           </div>
-          <div class="btn-group">
+          <div class="btn-group rounded p-2 bord content-photo">
+            <img  [src]="imgPreview" class="border border-secundary rounded-circle img mx-2" alt="Foto">
             <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               {{userSe.name_user}} {{userSe.lastname_user}}
             </button>
             <ul class="dropdown-menu dropdown-menu-end dropdown-select border-secundary">
+              <li class="h-75">
+                <div class="bg-secundary content-user">
+                  <span>{{userSe.name_user}} {{userSe.lastname_user}}</span>
+                </div>
+              </li>
               <li><a class="dropdown-item" href="#">Editar  perfil</a></li>
               <li><a class="dropdown-item" (click)="exitSesion()" href="#">Cerrar sesión</a></li>
             </ul>
@@ -70,7 +76,7 @@
               <textarea class="form-control" required name="descriptionTask" [(ngModel)]="descriptionProject"></textarea>
             </div>
             <div class="mb-3">
-              <label class="form-label">Asinación</label> <fa-icon data-bs-toggle="tooltip" title="Para seleccionar más de un usuario mantenga la tecla CTRL" [icon]="faExclamationCircle"></fa-icon>
+              <label class="form-label">Asignación</label> <fa-icon data-bs-toggle="tooltip" title="Para seleccionar más de un usuario mantenga la tecla CTRL" [icon]="faExclamationCircle"></fa-icon>
               <select class="form-select" multiple aria-label="multiple select example" name="assignmentUserProject" [(ngModel)]="assignmentUserProject">
                 <option *ngFor="let user of allUsers" [value]="user.id_user">{{user.name_user}} {{ user.lastname_user}}</option>
               </select>
