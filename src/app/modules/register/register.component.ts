@@ -4,6 +4,8 @@ import { UserInfor } from 'src/app/interfaces/user.interface';
 import { AlertsService } from 'src/app/core/alerts.service';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Storage, ref, uploadBytes } from '@angular/fire/storage'
+import { User } from '../../interfaces/user.interface';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -27,7 +29,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(private serviceRegister : RegisterService,
               private alertService: AlertsService,
-              private storage: Storage) { }
+              private storage: Storage,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -43,19 +46,23 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser(){
+    this.alertService.loading();
     if(this.user.password_user === this.passwordUserRepeit){
       const imgRef = ref(this.storage, `images/${this.user.name_user}_${this.user.lastname_user}`)
       uploadBytes(imgRef, this.img)
       .then((response)=>{
         this.user.img_user = response.metadata.fullPath;
         this.serviceRegister.createUser(this.user).subscribe((response)=>{
-          this.alertService.showAlert('success','Usuario creado', 'El usuario ha sido registrado, se enviará un correo para verificar la cuenta' )
+          this.alertService.showAlert('success','Creación de usuario', 'El usuario ha sido registrado, se enviará un correo para verificar la cuenta')
+          this.router.navigate(['/login'])
       })
        
       })
       .catch(err=> console.log(err))
 
  
+    }else{
+      this.alertService.showAlert('error', 'Creación de usuario', 'La contraseña debe ser confirmada')
     }
     
   }

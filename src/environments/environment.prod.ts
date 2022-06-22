@@ -9,6 +9,6 @@ export const environment = {
     messagingSenderId: '1012866669163',
   },
   production: true,
-  baseUrl: 'http://localhost:9000/api',
-  url: 'http://localhost:9000/'
+  baseUrl: 'https://restapi-gpagil.herokuapp.com/api',
+  url: 'https://restapi-gpagil.herokuapp.com/'
 };

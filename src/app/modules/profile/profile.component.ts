@@ -51,21 +51,32 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile():void{
-
     this.alertService.questionAlert('Confirmación de cambio de contraseña', '¿Seguro que desea cambiar la información de su perfil?, si confirma su sesión sera cerrada por seguridad')
     .then(({isConfirmed})=>{
+      this.alertService.loading();
       if(isConfirmed){
-        const imgRef = ref(this.storage, `images/${this.img.name}`)
-        uploadBytes(imgRef, this.img)
-        .then((response)=>{
-          this.userSe.img_user = response.metadata.fullPath;
+        if(this.img.name){
+          const imgRef = ref(this.storage, `images/${this.img.name}`)
+          uploadBytes(imgRef, this.img)
+          .then((response)=>{
+            this.userSe.img_user = response.metadata.fullPath;
+            this.loginService.updateUser(this.userSe).subscribe((res)=>{
+              if(res.updateState){
+                this.alertService.showAlert('success','Actualización del usurio', 'Los datos del usuario han sido actualizados')
+                this.loginService.exitSesion();
+              }
+            })
+          });
+        }else{
           this.loginService.updateUser(this.userSe).subscribe((res)=>{
             if(res.updateState){
               this.alertService.showAlert('success','Actualización del usurio', 'Los datos del usuario han sido actualizados')
               this.loginService.exitSesion();
             }
-       })
-      })
+          })
+        }     
+        
+
       }
     });
    

@@ -3,6 +3,8 @@ import { ProjectService } from '../project/project.service';
 import { Project } from 'src/app/interfaces/project.interface';
 import { TaskAssigment } from 'src/app/interfaces/task.interface';
 import { Router } from '@angular/router';
+import { faList, faDiagramProject, faListCheck} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -11,11 +13,19 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
+  faList = faList;
+  faDiagramProject = faDiagramProject;
+  faListCheck = faListCheck
   view: [number,number] = [650, 300];
   idUser:any = 0;
   projects: Project[] = [];
   project: any = 0;
   tasksAssignment:TaskAssigment[] = []
+  totaly: any ={
+    projects: 0,
+    tasks:0,
+    subtasks:0
+  }
   // options
   showXAxis: boolean = true;
   showYAxis: boolean = true;
@@ -51,8 +61,11 @@ export class DashboardComponent implements OnInit {
     })
 
     this.serviceProject.getTaskByAssignment(this.idUser.id_user).subscribe((data:any)=>{
-      console.log(data);
       this.tasksAssignment = data;
+    })
+
+    this.serviceProject.getTotalyByUser(this.idUser.id_user).subscribe((data:any)=>{
+      this.totaly = {...data}
     })
   }
   
@@ -91,7 +104,6 @@ export class DashboardComponent implements OnInit {
               tasks[2].value = tasks[2].value+1;
             break;
         }
-        console.log(tasks);
         return tasks;
     },[{'name':'Por hacer','value':0},{'name':'Haciendo','value':0},{'name':'Hecho', 'value':0}])
 

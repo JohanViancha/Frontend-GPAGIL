@@ -1,61 +1,113 @@
 <div class="container-fluid row mt-3">
 
-  <div class="card col-12 col-md-12 col-lg-12 col-xl-6">
-    <div class="card-header fs-6 fw-bold">
-      Mis tareas por prioridad
-    </div>
-      <div class="card-body">
-        <ngx-charts-bar-horizontal class="fs-3"
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="single"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        legendTitle="Prioridades"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)">
-        </ngx-charts-bar-horizontal>
+  <div class="d-flex justify-content-evenly my-2">
+      <div class="card border-primary mb-3">
+        <div class="card-header text-center">Proyectos asignados</div>
+        <div class="card-body text-primary text-center">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <fa-icon class="icon-lg" [icon]="faDiagramProject"></fa-icon>
+            </div>
+            <div class="fs-2 mx-3 flex-grow-1">
+              {{totaly.projects}}
+            </div>
+          </div> 
+        </div>
       </div>
-    </div>
+
+      <div class="card border-primary mb-3">
+        <div class="card-header text-center">Tareas asignadas</div>
+        <div class="card-body text-primary text-center">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <fa-icon class="icon-lg" [icon]="faList"></fa-icon>
+            </div>
+            <div class="fs-2 mx-3 flex-grow-1">
+              {{totaly.tasks}}
+            </div>
+          </div> 
+        </div>
+      </div>
+
+  
+      <div class="card border-primary mb-3">
+        <div class="card-header text-center">Subtareas asignadas</div>
+        <div class="card-body text-primary text-center">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <fa-icon class="icon-lg" [icon]="faListCheck"></fa-icon>
+            </div>
+            <div class="flex-grow-1 fs-2 mx-3">
+              {{totaly.subtasks}}
+            </div>
+          </div> 
+        </div>
+      </div>
 
 
-  <div class="card col-12 col-md-12 col-lg-12 col-xl-6">
-    <div class="card-header fs-6 fw-bold">
-      Progreso por proyecto
+  </div>
+
+  <hr>
+  <div class="col-12 col-md-12 col-lg-12 col-xl-6">
+    <div class="card">
+      <div class="card-header fs-6 fw-bold">
+        Mis tareas por prioridad
+      </div>
+        <div class="card-body py-5">
+          <ngx-charts-bar-horizontal class="fs-3"
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="single"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegend"
+          legendTitle="Prioridades"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          (select)="onSelect($event)"
+          (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)">
+          </ngx-charts-bar-horizontal>
+        </div>
     </div>
-      <div class="card-body">
-        <select (change)="selectProject()" class="form-select" [(ngModel)]="project">
-          <option selected value="0">Selecciona un proyecto</option>
-          <option  *ngFor="let project of projects" [value]="project.id_project">{{project.name_project}}</option>
-        </select>
-        <br>
-        <ngx-charts-pie-chart
-        [view]="view"
-        [scheme]="colorSchemeTasks"
-        [results]="tasks"
-        [gradient]="gradient"
-        [labels]="true"
-        [explodeSlices]="true"
-        legendTitle="Tareas"
-        [legend]="showLegend"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-        >
-      </ngx-charts-pie-chart>
+    
+  </div>
+
+  <div class="col-12 col-md-12 col-lg-12 col-xl-6">
+    <div class="card">
+      <div class="card-header fs-6 fw-bold">
+        Progreso por proyecto
+      </div>
+        <div class="card-body">
+          <select (change)="selectProject()" class="form-select" [(ngModel)]="project">
+            <option selected value="0">Selecciona un proyecto</option>
+            <option  *ngFor="let project of projects" [value]="project.id_project" >{{project.name_project}}</option>
+          </select>
+          <br>
+          <ngx-charts-pie-chart
+            [view]="view"
+            [scheme]="colorSchemeTasks"
+            [results]="tasks"
+            [gradient]="gradient"
+            [labels]="true"
+            [explodeSlices]="true"
+            legendTitle="Tareas"
+            [legend]="showLegend"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+          >
+          </ngx-charts-pie-chart>
+      </div>
     </div>
   </div>
 
   <div class="container-fluid mt-3 content-table-task">
     <table class="table table-responsive table-striped table-hover caption-top">
-      <caption class="fs-6 fw-bold">Lista de tareas asignadas</caption>
+      <caption class="fs-6 fw-bold">Lista de tareas pendientes</caption>
       <thead class="bg-primary text-white p-2">
         <tr>
           <td>Nombre del proyecto</td>

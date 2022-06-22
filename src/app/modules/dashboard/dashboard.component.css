@@ -2,3 +2,8 @@
     overflow:auto;
     height:500px;
 }
+
+.icon-lg{
+    font-size: 70px;
+    margin: auto;
+}

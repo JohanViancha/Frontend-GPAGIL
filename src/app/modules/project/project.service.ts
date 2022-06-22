@@ -58,6 +58,12 @@ export class ProjectService {
     return this.http.post<any>(`${url}`, {'idProject': id});
   }
 
+  
+  getTotalyByUser(id:number):Observable<any>{
+    const url = `${this.apiUrl}/projects/getTotalyByUser`;
+    return this.http.post<any>(`${url}`, {'idUser': id});
+  }
+
   updateStateTask(idTask: number, state:string):Observable<ReturnMessage>{
     const url = `${this.apiUrl}/tasks/updateStateTask`;
     return this.http.post<ReturnMessage>(`${url}`, {'idTask': idTask, 'state':state});

@@ -71,18 +71,14 @@
                  <img  [src]="imgPreview" class="border border-primary rounded-circle img" alt="Foto">
                 </div>
 
-                <div class="row">
-                  <div class="col-1 d-flex align-items-center">
+                <div class="mt-3">
                     <button class="btn btn-primary btn-block" (click)="updateProfile()">
                       Actualizar
                     </button>
-                  </div>
-  
-                  <div class="col-1 mx-2 d-flex align-items-center">
-                    <button class="btn btn-secondary btn-block" [routerLink]="['/plataform/dashboard']" routerLinkActive="router-link-active" >
+                    <button class="btn btn-secondary btn-block mx-2" [routerLink]="['/plataform/dashboard']" routerLinkActive="router-link-active" >
                       Cancelar
                     </button>
-                  </div>
+
                 </div>
                 
           
@@ -109,20 +105,18 @@
                     <input type="password" class="form-control" name="passwordNewRepeat" [(ngModel)]="passwordChange.passwordNewRepeat"/>
                     <label class="form-label">Confirmar contraseña nueva</label>
                   </div>
+                <div class="mt-3">
+                  <button class="btn btn-primary btn-block" (click)="changePassword()">
+                    Actualizar
+                  </button>
 
+
+                  <button class="btn btn-secondary btn-block mx-2" [routerLink]="['/plataform/dashboard']" routerLinkActive="router-link-active" >
+                    Cancelar
+                  </button>
+
+                </div>
+                     
                 
-                  <div class="row">
-                    <div class="col-1 d-flex align-items-center">
-                      <button class="btn btn-primary btn-block" (click)="changePassword()">
-                        Actualizar
-                      </button>
-                    </div>
-    
-                    <div class="col-1 mx-2 d-flex align-items-center">
-                      <button class="btn btn-secondary btn-block" [routerLink]="['/plataform/dashboard']" routerLinkActive="router-link-active" >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-             </form>
+              </form>
 </div>

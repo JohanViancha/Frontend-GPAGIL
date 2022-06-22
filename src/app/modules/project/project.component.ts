@@ -8,12 +8,6 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { KeyValue, ReturnMessage } from '../../interfaces/general.interface';
 import { User, UserInfor } from '../../interfaces/user.interface';
-import { ProjectSingle } from '../../interfaces/project.interface';
-import { LoginService } from '../login/login.service';
-import { AuthService } from 'src/app/core/auth.service';
-import { SocketService } from '../chat/socket.service';
-import { ChatService } from '../chat/chat.service';
-import { SubTask } from '../../interfaces/task.interface';
 import { AlertsService } from '../../core/alerts.service';
 import { Project } from 'src/app/interfaces/project.interface';
 
@@ -78,6 +72,7 @@ export class ProjectComponent implements OnInit {
     this.done = [];
     this.doing = [];
     await this.serviceProject.getTaskByProject(this.idProject).subscribe(async (response: any)=>{
+
     this.all = await response.tasks.map( (task:any)=>{
         const subtask = response.subtasks.filter((subtask:any)=> subtask.id_task === task.id_task);
         return  {
@@ -91,8 +86,6 @@ export class ProjectComponent implements OnInit {
           },0)* 100 /response.subtasks.filter((subtask:any)=> subtask.id_task === task.id_task).length)
         }
     })
-
-    console.log(this.all);
 
     this.all.forEach((task:Task)=>{
       switch(task.state_task){
@@ -155,14 +148,17 @@ export class ProjectComponent implements OnInit {
       this.assignment,this.dateEnd,
       this.priorityTask,this.subTasks, this.idProject)
       .subscribe((response:ReturnMessage)=>{  
+        this.alertService.showAlert('success', 'Creación de tareas', `Se ha creado la tarea ${this.nameTask} correctamente`);
+        this.clearFormModal();
+        this.listTasks();
+        this.subTasks = [];
+
       })
   }
 
   async createTask(){
+    this.alertService.loading();
     await this.saveTask();
-    await this.listTasks();
-    await this.clearFormModal();
-    this.subTasks = [];
   }
 
   addSubTask(){
@@ -175,7 +171,6 @@ export class ProjectComponent implements OnInit {
   }
 
   finishProject(id:number){
-
     this.alertService.questionAlert('Finalización del proyecto','¿Seguro que desea finalizar el proyecto?').then(({isConfirmed})=>{
       if(isConfirmed){
         this.serviceProject.finishProjectById(id).subscribe((resp)=>{
