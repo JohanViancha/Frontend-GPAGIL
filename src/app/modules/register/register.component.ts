@@ -43,9 +43,7 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser(){
-    console.log('eraf');
     if(this.user.password_user === this.passwordUserRepeit){
-      console.log(this.user.name_user);
       const imgRef = ref(this.storage, `images/${this.user.name_user}_${this.user.lastname_user}`)
       uploadBytes(imgRef, this.img)
       .then((response)=>{

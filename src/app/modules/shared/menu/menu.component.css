@@ -15,7 +15,7 @@
 
 .dropdown-select{
     width: 250px;
-    height: 250px;
+    height: 278px;
 }
 
 .img{
@@ -24,7 +24,24 @@
     object-fit: cover;
 }
 
-.content-photo{
+.background-photo{
     background-color:#6c757d ;
 }
+.content-photo{
+    width: 310px;
+}
 
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.img-md{
+    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.icon-user{
+    color:#6c757d  ;
+}

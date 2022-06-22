@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatComponent } from '../chat/chat.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ProfileComponent } from '../profile/profile.component';
 
 
 
@@ -19,7 +20,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MenuComponent,
     ProjectComponent,
     DashboardComponent,
-    ChatComponent
+    ChatComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,

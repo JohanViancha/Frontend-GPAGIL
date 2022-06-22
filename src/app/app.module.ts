@@ -15,6 +15,7 @@ import { VerifyComponent } from './modules/verify/verify.component';
 import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideStorage,getStorage } from '@angular/fire/storage';
+import { ProfileComponent } from './modules/profile/profile.component';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
     LoginComponent,
     RegisterComponent,
     FooterComponent,
-    VerifyComponent
+    VerifyComponent,
   ],
   imports: [
     BrowserModule,

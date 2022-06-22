@@ -4,7 +4,7 @@ import { Project } from 'src/app/interfaces/project.interface';
 import { UserInfor } from 'src/app/interfaces/user.interface';
 import { ProjectService } from '../../project/project.service';
 import { ProjectSingle } from '../../../interfaces/project.interface';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { LoginService } from '../../login/login.service';
@@ -21,8 +21,10 @@ export class MenuComponent implements OnInit {
 
   proyects: Project[] = [];
   userSe: UserInfor;
-  imgPreview: string | ArrayBuffer = '';
+  imgPreview: string | ArrayBuffer = '../../../assets/images/image_user.png';
   faPlusCircle = faPlusCircle
+  faSignOut = faSignOut
+  faUser = faUser
   faExclamationCircle = faExclamationCircle
   nameProject:string = "";
   descriptionProject:string = "";
@@ -115,8 +117,7 @@ export class MenuComponent implements OnInit {
   }
 
   exitSesion(){
-    this.router.navigate(['/login']);
-    localStorage.clear();
+    this.serviceLogin.exitSesion();
   }
 
 

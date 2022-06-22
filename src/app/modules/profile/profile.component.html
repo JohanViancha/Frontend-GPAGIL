@@ -1,0 +1,128 @@
+<div class="container-fluid mt-4">
+
+    <div class="row">
+        <div class="col-3">
+            <div class="card " >
+                <img [src]="imgPreview" class="card-img-top" alt="Foto">
+                <div class="card-body bg-secondary text-white text-center">
+                    <h5 class="card-title">{{userSe.name_user}} {{userSe.lastname_user}}</h5>
+                    <p class="card-text">{{userSe.id_role == 1 ? 'Administrador':'Desarrollador'}}</p>
+                    <p class="card-text">{{userSe.email_user}}</p>
+                </div>
+            </div>
+            
+          </div>
+          <div class="col-9">
+            <ul  class="nav nav-tabs">
+                <li >
+                    <button [ngClass]="{active: selectTab == 1}" class="nav-link" (click)="changeTabs()" aria-current="page">Mi información</button>
+                </li>
+                <li >
+                    <button [ngClass]="{active: selectTab == 2}" class="nav-link"  (click)="changeTabs()">Cambio de contraseña</button>
+                </li>
+            </ul>
+
+            <form class="mt-4" *ngIf="selectTab == 1">
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <input type="text" id="form3Example1" class="form-control" name="name_user" [(ngModel)]="userSe.name_user"/>
+                      <label class="form-label" for="form3Example1" >Nombres</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <input type="text" id="form3Example2" class="form-control" name="lastname_user" [(ngModel)]="userSe.lastname_user"/>
+                      <label class="form-label" for="form3Example2" >Apellidos</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Email input -->
+                <div class="row">
+                    <div class="col-6 form-outline mb-4">
+                        <input disabled="" autocomplete="off" type="email" id="form3Example3" class="form-control" name="email_ user" [(ngModel)]="userSe.email_user" />
+                        <label class="form-label" for="form3Example3" >Email</label>
+                      </div>
+
+                      <div class="col-6 form-outline mb-4">
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                          <input type="radio" class="btn-check" name="tipo_user" [(ngModel)]="userSe.id_role" [value]="1" id="btnradio1"  autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnradio1">Administrador</label>
+                        
+                          <input type="radio" class="btn-check" name="tipo_user" [(ngModel)]="userSe.id_role" [value]="2" id="btnradio2" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnradio2">Desarrollador</label>
+              
+                        </div>
+                        <br>
+                        <label class="form-label" for="form3Example4" >Tipo usuario</label>
+      
+                      </div>
+      
+                </div>
+                
+                <div class="form-outline mb-4">
+                  <input type="file" (change)="loadImage($event)" class="form-control"/>
+                  <label class="form-label" for="form3Example4" >Foto</label>
+                </div>
+
+                <div *ngIf="imgPreview != ''" class="form-outline m-auto text-center mb-4">
+                 <img  [src]="imgPreview" class="border border-primary rounded-circle img" alt="Foto">
+                </div>
+
+                <div class="row">
+                  <div class="col-1 d-flex align-items-center">
+                    <button class="btn btn-primary btn-block" (click)="updateProfile()">
+                      Actualizar
+                    </button>
+                  </div>
+  
+                  <div class="col-1 mx-2 d-flex align-items-center">
+                    <button class="btn btn-secondary btn-block" [routerLink]="['/plataform/dashboard']" routerLinkActive="router-link-active" >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+                
+          
+               
+              </form>
+
+            
+
+
+              <form class="mt-4" *ngIf="selectTab == 2">
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+
+                  <div class="form-outline">
+                    <input type="password" id="form3Example1" class="form-control" name="passwordCurrent" [(ngModel)]="passwordChange.passwordCurrent"/>
+                    <label class="form-label">Contraseña actual</label>
+                  </div>
+ 
+                  <div class="form-outline">
+                    <input type="password" class="form-control" name="passwordNew" [(ngModel)]="passwordChange.passwordNew"/>
+                    <label class="form-label">Contraseña nueva</label>
+                  </div>
+
+                  <div class="form-outline">
+                    <input type="password" class="form-control" name="passwordNewRepeat" [(ngModel)]="passwordChange.passwordNewRepeat"/>
+                    <label class="form-label">Confirmar contraseña nueva</label>
+                  </div>
+
+                
+                  <div class="row">
+                    <div class="col-1 d-flex align-items-center">
+                      <button class="btn btn-primary btn-block" (click)="changePassword()">
+                        Actualizar
+                      </button>
+                    </div>
+    
+                    <div class="col-1 mx-2 d-flex align-items-center">
+                      <button class="btn btn-secondary btn-block" [routerLink]="['/plataform/dashboard']" routerLinkActive="router-link-active" >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+             </form>
+</div>

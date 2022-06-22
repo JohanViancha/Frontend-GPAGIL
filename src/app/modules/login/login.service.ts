@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ResponseAuth, SearchUser, User, UserInfor } from '../../interfaces/user.interface';
 import { ReturnMessage } from 'src/app/interfaces/general.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,8 @@ export class LoginService {
     this.user = user;
   }
  
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router) { }
 
   
   mostrar(): Observable<UserInfor[]>{
@@ -59,5 +61,15 @@ export class LoginService {
     const url = `${this.apiUrl}/users/clearCodeSecurity`;
     return this.http.post<ReturnMessage>(url, {email});
   }
+
+  updateUser(user: UserInfor):Observable<ReturnMessage>{
+    const url = `${this.apiUrl}/users/updateUser`;
+    return this.http.post<ReturnMessage>(url, user);
+  }
+  exitSesion():void{
+    this.router.navigate(['/login']);
+    localStorage.clear();
+  }
+  
 
 }

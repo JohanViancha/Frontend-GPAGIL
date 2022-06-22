@@ -18,7 +18,7 @@
                   Proyectos
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li *ngFor="let item of proyects" class="dropdown-item" (click)="searchTaks(item.id_project, item.name_project, item.description_project, item.id_user_project)">{{item.name_project}}</li>
+                  <li *ngFor="let item of proyects" class="dropdown-item cursor-pointer" (click)="searchTaks(item.id_project, item.name_project, item.description_project, item.id_user_project)">{{item.name_project}}</li>
                 </ul>
               </li>
     
@@ -29,19 +29,21 @@
               </li>
             </ul>
           </div>
-          <div class="btn-group rounded p-2 bord content-photo">
+          <div class="btn-group rounded p-2 bord background-photo content-photo">
             <img  [src]="imgPreview" class="border border-secundary rounded-circle img mx-2" alt="Foto">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button type="button" class="btn btn-secondary dropdown-toggle text-left" data-bs-toggle="dropdown" aria-expanded="false">
               {{userSe.name_user}} {{userSe.lastname_user}}
             </button>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-select border-secundary">
-              <li class="h-75">
-                <div class="bg-secundary content-user">
-                  <span>{{userSe.name_user}} {{userSe.lastname_user}}</span>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-select border-secundary p-0">
+              <li class="h-75 background-photo text-center text-white">
+                <div class="p-3">
+                  <p>{{userSe.name_user}} {{userSe.lastname_user}}</p>
+                  <img  [src]="imgPreview" class="border border-secundary rounded-circle img-md mx-2" alt="Foto">
+                  <p>{{userSe.id_role == 1 ? 'Administrador' : 'Desarrollador'}}</p>
                 </div>
               </li>
-              <li><a class="dropdown-item" href="#">Editar  perfil</a></li>
-              <li><a class="dropdown-item" (click)="exitSesion()" href="#">Cerrar sesión</a></li>
+              <li><a class="dropdown-item" [routerLink]="['profile']"><fa-icon class="me-2 icon-user" [icon]="faUser"></fa-icon> Mi  perfil</a></li>
+              <li><a class="dropdown-item" (click)="exitSesion()" href="#"><fa-icon class="me-2 icon-user" [icon]="faSignOut"></fa-icon>Cerrar sesión</a></li>
             </ul>
           </div>
           
