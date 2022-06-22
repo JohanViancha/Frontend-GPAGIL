@@ -58,8 +58,6 @@ export class ChatComponent implements OnInit {
   }
   
   orderMessage(message: chatMessage[]){
-    console.log(message);
-    console.log(this.projectSelected);
     return message.filter((chat)=>{
       if(chat.id_project == this.projectSelected.id_project){
         return chat;

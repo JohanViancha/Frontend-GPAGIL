@@ -70,7 +70,6 @@ export class ProjectService {
   }
 
   getUserByProject(idProyect:number):Observable<User[]>{
-    console.log(idProyect);
     const url = `${this.apiUrl}/users/getUserByProject`;
     return this.http.post<User[]>(`${url}`,{'idProyect': idProyect});
   }
