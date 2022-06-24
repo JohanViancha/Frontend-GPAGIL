@@ -90,15 +90,15 @@ export class MenuComponent implements OnInit {
     const user = JSON.parse(localStorage.getItem('userSe')!);
     await this.serviceProject.createProject(this.nameProject,this.descriptionProject,
       userSelect,this.dateEndProject, user.id_user).subscribe((res)=>{
-        this.alertService.showAlert('success','Creación del proyecto', res.message)
+        this.alertService.showAlert('success','Creación del proyecto', res.message);
+        this.getProjectByUser(this.userSe.id_user!);
+        this.clearFormModal();
       })
     
   }
 
   async createProject(){
     await this.saveProject();
-    await this.getProjectByUser(this.userSe.id_user!);
-    this.clearFormModal();
   }
 
   clearFormModal(){
