@@ -177,6 +177,10 @@ export class ProjectComponent implements OnInit {
         this.serviceProject.finishProjectById(id).subscribe((resp)=>{
           if(resp.updateState){
             this.alertService.showAlert('success', 'Finalización del proyecto', resp.message)
+            this.serviceProject.getProjectByIdUserIdProject(this.idProject,this.userSe.id_user!).subscribe((project:Project)=>{
+              this.serviceProject.setProject(project);
+              this.projectSelected = project;
+            })
           }else{
             this.alertService.showAlert('error', 'Finalización del proyecto', resp.message)
           }
