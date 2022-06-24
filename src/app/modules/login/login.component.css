@@ -1,5 +1,17 @@
 
-
-.main-height{
-    height: 90%;
+@media (min-width: 992px) {
+    .main-height{
+        height: 90vh;
+        margin-bottom: 0px;
+    }
+    
 }
+
+@media (max-width: 992px) {
+    .main-height{
+        margin-bottom: 35px;
+    }
+    
+}
+
+

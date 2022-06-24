@@ -137,9 +137,10 @@ export class ProjectComponent implements OnInit {
      this.alertService.questionAlert('Subtarea realizada','¿Seguro que desea marca como realizada está subtarea?').then(({isConfirmed})=>{
        if(isConfirmed){
          this.serviceProject.updateStateSubTask(id).subscribe((response: ReturnMessage)=>{
+          this.listTasks();
          })
        }
-       this.listTasks();
+     
      })
   }
 
