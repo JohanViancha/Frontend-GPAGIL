@@ -51,10 +51,10 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile():void{
-    this.alertService.questionAlert('Confirmación de cambio de contraseña', '¿Seguro que desea cambiar la información de su perfil?, si confirma su sesión sera cerrada por seguridad')
+    this.alertService.questionAlert('Confirmación de actualización del perfil', '¿Seguro que desea cambiar la información de su perfil?, si confirma su sesión sera cerrada por seguridad')
     .then(({isConfirmed})=>{
-      this.alertService.loading();
       if(isConfirmed){
+        this.alertService.loading();
         if(this.img.name){
           const imgRef = ref(this.storage, `images/${this.img.name}`)
           uploadBytes(imgRef, this.img)
